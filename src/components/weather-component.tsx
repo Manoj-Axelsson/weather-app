@@ -2,18 +2,95 @@
 
 import { useState, useEffect } from "react";
 import { Weather } from "@/app/types/weather";
-// import {
-//     Sun,
-//     Cloud,
-//     CloudRain,
-//     CloudSnow,
-//     CloudFog,
-//     CloudLightning,
-//     HelpCircle,
-// } from "lucide-react";
+import {
+    Sun,
+    Cloud,
+    CloudRain,
+    CloudSnow,
+    CloudLightning,
+    CloudFog,
+    HelpCircle,
+    Droplets,
+    Wind,
+    Eye,
+} from "lucide-react";
 import { deriveInsights } from "@/lib/insights";
 import EnvironmentalMetric from "./EnvironmentalMetric";
-import { Sun, CloudRain, CloudSnow, CloudLightning, CloudFog, Cloud, HelpCircle } from "lucide-react";
+
+/* ─────────────────────────────────────────────
+   Icon styling constants (v1 locked)
+───────────────────────────────────────────── */
+const CONDITION_ICON_STYLE = "w-8 h-8";
+const METRIC_ICON_STYLE = "w-6 h-6 text-slate-600/80";
+const ICON_STROKE = 1.5;
+
+/* ─────────────────────────────────────────────
+   Condition → Icon mapping
+───────────────────────────────────────────── */
+function getConditionIcon(summary?: string) {
+    const text = summary?.toLowerCase() ?? "";
+
+    if (text.includes("sun") || text.includes("clear")) {
+        return (
+            <Sun
+                className={`${CONDITION_ICON_STYLE} text-amber-500`}
+                strokeWidth={ICON_STROKE}
+            />
+        );
+    }
+
+    if (text.includes("rain") || text.includes("drizzle")) {
+        return (
+            <CloudRain
+                className={`${CONDITION_ICON_STYLE} text-blue-500`}
+                strokeWidth={ICON_STROKE}
+            />
+        );
+    }
+
+    if (text.includes("snow") || text.includes("sleet") || text.includes("hail")) {
+        return (
+            <CloudSnow
+                className={`${CONDITION_ICON_STYLE} text-blue-300`}
+                strokeWidth={ICON_STROKE}
+            />
+        );
+    }
+
+    if (text.includes("thunder") || text.includes("storm") || text.includes("lightning")) {
+        return (
+            <CloudLightning
+                className={`${CONDITION_ICON_STYLE} text-purple-500`}
+                strokeWidth={ICON_STROKE}
+            />
+        );
+    }
+
+    if (text.includes("fog") || text.includes("mist") || text.includes("haze")) {
+        return (
+            <CloudFog
+                className={`${CONDITION_ICON_STYLE} text-slate-400`}
+                strokeWidth={ICON_STROKE}
+            />
+        );
+    }
+
+    if (text.includes("cloud")) {
+        return (
+            <Cloud
+                className={`${CONDITION_ICON_STYLE} text-slate-500`}
+                strokeWidth={ICON_STROKE}
+            />
+        );
+    }
+
+    return (
+        <HelpCircle
+            className={`${CONDITION_ICON_STYLE} text-slate-400`}
+            strokeWidth={ICON_STROKE}
+        />
+    );
+}
 
 export default function WeatherComponent() {
     const [weather, setWeather] = useState<Weather | null>(null);
@@ -65,11 +142,9 @@ export default function WeatherComponent() {
     return (
         <div className="flex flex-col gap-8 w-full">
             {/* Background */}
+
             <div
-                className={`fixed inset-0 -z-20 transition-all duration-1000 ease-in-out ${isSnowing
-                    ? "bg-linear-to-b from-blue-500 via-blue-200 to-stone-100"
-                    : "bg-linear-to-b from-teal-100 via-cyan-50 to-stone-100"
-                    }`}
+                className="fixed inset-0 -z-20 bg-linear-to-b from-teal-100 via-cyan-50 to-stone-100"
             />
 
             {/* Header */}
@@ -81,9 +156,10 @@ export default function WeatherComponent() {
                 <p className="mt-3 text-lg text-slate-600">
                     A weather gauge for navigating unpredictable conditions.
                 </p>
+                <img loading="lazy" decoding="async" width="1630" height="220" src="https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22.png" className="vc_single_image-img attachment-full" alt="10637" title="10637 Png-22" srcSet="https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22.png 1830w, https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22-600x89.png 600w" sizes="auto, opacity-80 (max-width: 1830px) 100vw, 1830px"></img>
 
                 <div className="mt-4 flex items-center justify-center gap-2 text-lg italic text-slate-500">
-                    <span>Designed to support planning ahead.</span>
+                    Designed to support planning ahead.
                 </div>
             </div>
 
@@ -117,43 +193,65 @@ export default function WeatherComponent() {
                             <EnvironmentalMetric
                                 label="Condition"
                                 value={weather.timeseries[0].summary}
-                                icon={(() => {
-                                    const summary =
-                                        weather.timeseries[0].summary?.toLowerCase() || "";
-                                    if (summary.includes("sun") || summary.includes("clear"))
-                                        return <Sun className="w-8 h-8 text-amber-500" />;
-                                    if (summary.includes("rain"))
-                                        return <CloudRain className="w-8 h-8 text-blue-500" />;
-                                    if (summary.includes("snow"))
-                                        return <CloudSnow className="w-8 h-8 text-blue-300" />;
-                                    if (summary.includes("thunder"))
-                                        return <CloudLightning className="w-8 h-8 text-purple-500" />;
-                                    if (summary.includes("fog"))
-                                        return <CloudFog className="w-8 h-8 text-slate-400" />;
-                                    if (summary.includes("cloud"))
-                                        return <Cloud className="w-8 h-8 text-slate-500" />;
-                                    return <HelpCircle className="w-8 h-8 text-slate-400" />;
-                                })()}
+                                icon={getConditionIcon(weather.timeseries[0].summary)}
                             />
 
                             <EnvironmentalMetric
                                 label="Humidity"
                                 value={weather.timeseries[0].humidity}
                                 unit="%"
+                                icon={
+                                    <Droplets
+                                        className={METRIC_ICON_STYLE}
+                                        strokeWidth={ICON_STROKE}
+                                    />
+                                }
                             />
 
                             <EnvironmentalMetric
                                 label="Wind"
                                 value={weather.timeseries[0].windSpeed}
                                 unit="m/s"
+                                icon={
+                                    <Wind
+                                        className={METRIC_ICON_STYLE}
+                                        strokeWidth={ICON_STROKE}
+                                    />
+                                }
                             />
 
                             <EnvironmentalMetric
                                 label="Visibility"
                                 value={weather.timeseries[0].visibility}
                                 unit="km"
+                                icon={
+                                    <Eye
+                                        className={METRIC_ICON_STYLE}
+                                        strokeWidth={ICON_STROKE}
+                                    />
+                                }
                             />
                         </div>
+
+                        {insights?.weeklyOutlook && (
+                            <div className="mt-10">
+                                <details className="group rounded-2xl border border-slate-200/60 bg-white/50 backdrop-blur-sm">
+                                    <summary className="flex cursor-pointer items-center justify-between px-6 py-4 text-sm font-semibold text-slate-700 hover:bg-white/60 transition-colors">
+                                        <span className="tracking-wide">
+                                            Weekly Planning Outlook
+                                        </span>
+
+                                        <span className="text-slate-400 group-open:rotate-180 transition-transform">
+                                            ▼
+                                        </span>
+                                    </summary>
+
+                                    <div className="px-6 pb-5 pt-3 text-sm text-slate-600 leading-relaxed">
+                                        {insights.weeklyOutlook}
+                                    </div>
+                                </details>
+                            </div>
+                        )}
 
                         <div className="mt-10 pt-8 border-t border-slate-200/50 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
                             <span>Station Status: Operational</span>
@@ -179,7 +277,7 @@ export default function WeatherComponent() {
                     />
                     <button
                         type="submit"
-                        className="absolute right-2 top-2 bottom-2 bg-amber-400/70 text-slate-900 px-8 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-400/90 active:scale-95 transition-all shadow-lg"
+                        className="absolute right-2 top-2 bottom-2 bg-slate-400/70 text-slate-900 px-8 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-400/90 active:scale-95 transition-all shadow-lg"
                     >
                         Search
                     </button>
@@ -188,3 +286,4 @@ export default function WeatherComponent() {
         </div>
     );
 }
+

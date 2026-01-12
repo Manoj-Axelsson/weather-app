@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 
 type EnvironmentalMetricProps = {
@@ -20,13 +21,16 @@ export default function EnvironmentalMetric({
                 {label}
             </div>
 
-            {icon && (
-                <div className="mb-2 text-slate-500">
-                    {icon}
-                </div>
-            )}
+            {icon ? (
+                <div className="mb-2">{icon}</div>
+            ) : null}
 
-            <div className="text-xl font-black text-slate-800">
+            <div
+                className={`${typeof value === "string"
+                    ? "text-sm font-semibold text-slate-700"
+                    : "text-xl font-black text-slate-800"
+                    }`}
+            >
                 {value}
                 {unit && (
                     <span className="text-xs font-bold text-slate-400 ml-1">
@@ -34,6 +38,7 @@ export default function EnvironmentalMetric({
                     </span>
                 )}
             </div>
+
         </div>
     );
 }
