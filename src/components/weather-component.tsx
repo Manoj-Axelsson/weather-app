@@ -247,6 +247,7 @@ export default function WeatherComponent() {
                                     </summary>
 
                                     <div className="px-6 pb-5 pt-3 text-sm text-slate-600 leading-relaxed">
+                                    <div className="px-6 pb-5 pt-3 text-[14px] font-black text-slate-600 leading-relaxed">
                                         {insights.weeklyOutlook}
                                     </div>
                                 </details>
