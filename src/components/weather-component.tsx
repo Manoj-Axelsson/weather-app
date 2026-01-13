@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { deriveInsights } from "@/lib/insights";
 import EnvironmentalMetric from "./EnvironmentalMetric";
+import Logo from "./logo";
 
 /* ─────────────────────────────────────────────
    Icon styling constants (v1 locked)
@@ -149,14 +150,31 @@ export default function WeatherComponent() {
 
             {/* Header */}
             <div className="mb-8 text-center">
-                <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
-                    Bearing Weather System
-                </h1>
+                <div className="flex items-center justify-center gap-4">
+                    <Logo className="h-28 opacity-60 text-slate-800" />
+                    <div>
+                        <h1 className="text-4xl font-bold tracking-tight text-slate-900">
+                            Bearing Weather System
+                        </h1>
+                        <p className="mt-3 text-lg text-slate-600">
+                            A weather gauge for navigating unpredictable conditions.
+                        </p>
+                    </div>
+                </div>
 
-                <p className="mt-3 text-lg text-slate-600">
-                    A weather gauge for navigating unpredictable conditions.
-                </p>
-                <img loading="lazy" decoding="async" width="1630" height="220" src="https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22.png" className="vc_single_image-img attachment-full" alt="10637" title="10637 Png-22" srcSet="https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22.png 1830w, https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22-600x89.png 600w" sizes="auto, opacity-80 (max-width: 1830px) 100vw, 1830px"></img>
+
+                <img
+                    loading="lazy"
+                    decoding="async"
+                    width="1630"
+                    height="220"
+                    src="https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22.png"
+                    className="vc_single_image-img attachment-full opacity-80 mx-auto"
+                    alt="10637"
+                    title="10637 Png-22"
+                    srcSet="https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22.png 1830w, https://ferroweathervanes.com/wp-content/uploads/2018/08/10637-Png-22-600x89.png 600w"
+                    sizes="(max-width: 1830px) 100vw, 1830px"
+                />
 
                 <div className="mt-4 flex items-center justify-center gap-2 text-lg italic text-slate-500">
                     Designed to support planning ahead.
@@ -236,7 +254,7 @@ export default function WeatherComponent() {
                         {insights?.weeklyOutlook && (
                             <div className="mt-10">
                                 <details className="group rounded-2xl border border-slate-200/60 bg-white/50 backdrop-blur-sm">
-                                    <summary className="flex cursor-pointer items-center justify-between px-6 py-4 text-sm font-semibold text-slate-700 hover:bg-white/60 transition-colors">
+                                    <summary className="flex cursor-pointer items-center justify-between px-6 py-4 text-[16px] font-bold text-slate-700 hover:bg-white/60 transition-colors">
                                         <span className="tracking-wide">
                                             Weekly Planning Outlook
                                         </span>
@@ -246,7 +264,7 @@ export default function WeatherComponent() {
                                         </span>
                                     </summary>
 
-                                    <div className="px-6 pb-5 pt-3 text-[14px] font-black text-slate-600 leading-relaxed">
+                                    <div className="px-6 pb-5 pt-3 text-[16px] font-bold text-slate-600 leading-relaxed">
                                         {insights.weeklyOutlook}
                                     </div>
                                 </details>
